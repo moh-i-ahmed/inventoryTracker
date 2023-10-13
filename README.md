@@ -1,14 +1,15 @@
 # Inventory Tracker
 
-An app I'm creating to track my growing inventory of essentials and knick-knacks. The idea is to catalogue my gaming and home automation gear, but it could extend to other things.
+An app I'm creating to track my growing personal inventory comprised mostly of home automation gear (IoT), some gaming stuff, and other knick-knacks but it could extend to other things.
 
-### Tech Stack
+## Tech Stack
 
 - Backend
-  - [Go](https://go.dev/)
+  - [Python 3.11](https://www.python.org/)
+  - [Django](https://www.djangoproject.com/)
 
 - Frontend
-  - [React](https://react.dev/)
+  - [React.js](https://react.dev/)
   - [Bootstrap](https://getbootstrap.com/)
 
 ---
