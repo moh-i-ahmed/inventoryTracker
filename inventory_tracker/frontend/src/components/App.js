@@ -1,15 +1,41 @@
+// import libraries
 import React, { Component } from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Link,
+    Redirect
+} from "react-router-dom";
+
+// import components
+import HomePage from "./HomePage";
+import AddItem from "./AddItem";
+
+// root/main component (App)
 export default class App extends Component {
     constructor(props) {
         super(props);
     }
 
+    // Render all App components
     render() {
-        return <h1>Testing React Code</h1>
+        return (
+            <>
+                <Router>
+                    <Routes>
+                        <Route path="/"         element={<HomePage/>} />
+                        <Route path="/add-item" element={<AddItem/>} />
+                    </Routes>
+                </Router>
+            </>
+        );
     }
 }
 
-const appDiv = document.getElementById("app")
-render(<App />, appDiv)
+// Render the div for React.js to control
+const appDiv = document.getElementById("app");
+const root = createRoot(appDiv);
+root.render(<App />);
