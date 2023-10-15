@@ -1,5 +1,5 @@
 // import react libraries
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import {
     BrowserRouter as Router,
     Routes,
