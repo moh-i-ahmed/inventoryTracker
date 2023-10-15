@@ -13,32 +13,21 @@ import {
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 
-
 // import components
 import HomePage from "./HomePage";
 import AddItem from "./AddItem";
 import MuiDatePicker from "./MuiDatePicker";
 
-// Create theme provider
-// const theme = createTheme();
-// const useStyles = makeStyles((theme) => {
-//     root: {}
-// });
-
-// root/main component (App)
+// main component (App)
 export default class App extends Component {
     constructor(props) {
         super(props);
     }
 
-    // classes = useStyles();
     // Render all App components
     render() {
         return (
             <>
-                {/* <ThemeProvider theme={theme}>
-                    {children}
-                </ThemeProvider> */}
                 <Router>
                     <Routes>
                         <Route path="/"         element={<HomePage/>} />
@@ -49,6 +38,11 @@ export default class App extends Component {
         );
     }
 }
+
+// useEffect(() => {
+//     const favicon = document.getElementById('favicon');
+//     favicon.setAttribute('href', '/static/images/favicon.ico');
+// }, []);
 
 // Render the div for React.js to control
 const appDiv = document.getElementById("app");
