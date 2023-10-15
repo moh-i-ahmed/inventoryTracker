@@ -17,9 +17,12 @@ import RadioGroup from "@mui/material/RadioGroup";
 import { MuiDatePicker } from './MuiDatePicker';
 import dayjs from "dayjs";
 
+
 export default class AddItem extends Component {
     constructor(props) {
         super(props);
+
+        // update state with form values
         this.state = {
             name: this.name,
             description: this.description,
@@ -33,7 +36,7 @@ export default class AddItem extends Component {
         this.handleAddItemButtonOnClick = this.handleAddItemButtonOnClick.bind(this);
     }
 
-    // 
+    // onChange event handler for 'add item' form
     handleInputChange(event) {
         const id = event.target.id;
         const value = event.target.value;
@@ -45,7 +48,7 @@ export default class AddItem extends Component {
         });
     }
 
-    // onClick Event handler for 'add item' button 
+    // onClick event handler for 'add item' button 
     handleAddItemButtonOnClick() {
         console.log(this.state);
 
@@ -65,7 +68,7 @@ export default class AddItem extends Component {
             }),
         };
 
-        // send post request to api
+        // post payload to api
         fetch('/api/add-item', requestOptions)
             .then((response) =>
                 response.json())
@@ -77,23 +80,26 @@ export default class AddItem extends Component {
             <Grid container spacing={1}>
                 <Grid item xs={12} align="center">
                     <Typography component="h4" variant="h4">
-                        Add new item to inventory
+                        Add Item
                     </Typography>
-                </Grid>
-                {/* Add item details */}
-                <Grid item xs={12} align="center">
-                    <FormControl component="fieldset">
-                        <TextField     id="name"          label="Name" required={true} value={this.name} inputProps={{min: 1,}} onChange={this.handleInputChange} />
-                        <TextField     id="description"   label="Description" required={false} value={this.description} defaultValue="" onChange={this.handleInputChange} />
-                        <TextField     id="price"         label="Price" required={true} type="number" value={this.price} inputProps={{min: 0.0,}} step="0.25" onChange={this.handleInputChange} />
-                        <TextField     id="count"         label="Count" required={true} type="number" value={this.count} inputProps={{min: 1,}} onChange={this.handleInputChange} />
-                        <MuiDatePicker id="purchase_date" value={this.purchase_date} onChange={this.handleInputChange} />
-                    </FormControl>
+                    {/* Add item details */}
                     <Grid item xs={12} align="center">
-                        <Button color='secondary' variant='contained' onClick={this.handleAddItemButtonOnClick}>Add Item</Button>
-                    </Grid>
-                    <Grid item xs={12} align="center">
-                        <Button color='primary' variant='contained' to='/' component={Link} >Back</Button>
+                        <FormHelperText>
+                            <div align="center">Add new item to inventory</div>
+                        </FormHelperText>
+                        <FormControl component="fieldset">
+                            <TextField     id="name"          label="Name" required={true} value={this.name} inputProps={{min: 1,}} onChange={this.handleInputChange} />
+                            <TextField     id="description"   label="Description" required={false} value={this.description} defaultValue="" onChange={this.handleInputChange} />
+                            <TextField     id="price"         label="Price" required={true} type="number" value={this.price} inputProps={{min: 0.0,}} step="0.25" onChange={this.handleInputChange} />
+                            <TextField     id="count"         label="Count" required={true} type="number" value={this.count} inputProps={{min: 1,}} onChange={this.handleInputChange} />
+                            <MuiDatePicker id="purchase_date" value={this.purchase_date} onChange={this.handleInputChange} />
+                        </FormControl>
+                        <Grid item xs={12} align="center">
+                            <Button color='secondary' variant='contained' onClick={this.handleAddItemButtonOnClick}>Add Item</Button>
+                        </Grid>
+                        <Grid item xs={12} align="center">
+                            <Button color='primary' variant='contained' to='/' component={Link}>Back</Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Grid>
