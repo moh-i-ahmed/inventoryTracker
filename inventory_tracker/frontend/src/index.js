@@ -1,7 +1,10 @@
 import { createRoot } from "react-dom/client";
+
+// project imports
 import App from "./components/App";
 
-// render the div for React.js to control
-const appDiv = document.getElementById("app");
-const root = createRoot(appDiv);
+// ==============================|| REACT DOM RENDER  ||============================== //
+
+const container = document.getElementById('app');
+const root = createRoot(container);
 root.render(<App />);

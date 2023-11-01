@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+
+// 3rd party
 import { Button, Grid, Typography, TextField, FormControl, FormHelperText, FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { MuiDatePicker } from './MuiDatePicker';
 import dayjs from "dayjs";
 
+// projects
+import { MuiDatePicker } from './MuiDatePicker';
+
 export default function AddItem() {
+    const navigate = useNavigate();
     useEffect(() => { document.title = 'Inventory Tracker | Add Item'; }, []);
 
     const [state, setState] = useState({
@@ -49,7 +54,7 @@ export default function AddItem() {
         // post payload to api
         fetch('/api/add-item', requestOptions)
             .then((response) => response.json())
-            .then((data) => console.log(data));
+            .then((data) => navigate('/get-item/' + data.id));
     };
 
     return (

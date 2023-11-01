@@ -64,3 +64,25 @@ class AddItemView(APIView):
             response = Response({f"Bad Request: Invalid data {serializer.data.items()}..."}, status=status.HTTP_400_BAD_REQUEST)
 
         return response
+
+class GetItemView(APIView):
+
+    serializer_class = ItemSerializer
+
+    # search for id keyword arg
+    lookup_url_kwarg = 'id'
+
+    # retrieve id from GET request
+    def get(self, request, format=None):
+        id = request.GET.get(self.lookup_url_kwarg)
+
+        if id is not None:
+            item = Item.objects.filter(id=id)
+
+            if len(item) > 0:
+                data = ItemSerializer(item[0]).data
+                return Response(data, status=status.HTTP_200_OK)
+            
+            return Response({'Item Not Found' : 'Invalid Item ID'}, status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({"Bad Request": "'ID' parameter not found in request"}, status=status.HTTP_400_BAD_REQUEST)
