@@ -1,14 +1,22 @@
-import React, { Component, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, Redirect } from "react-router-dom";
+import { animateScroll } from "react-scroll";
 
-// import components
+// my components
 import HomePage from "./HomePage";
 import AddItem from "./AddItem";
 import GetItem from "./GetItem";
-import { ClassNames } from "@emotion/react";
 
 // main component
 export default function App(props) {
+
+    useEffect(() => {
+        animateScroll.scrollToBottom({
+            containerId: "app",
+            duration: 2000,
+            smooth: true
+        })
+    }, []);
 
     return (
         <div className="center">

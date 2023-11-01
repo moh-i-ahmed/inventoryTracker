@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 // 3rd party
-import { Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tab } from '@mui/material';
+import { Typography, Grid, Button } from '@mui/material';
 import dayjs from 'dayjs';
 
+// my components
+import { ItemTable } from './ItemTable';
+
 export default function GetItem(props) {
+    const headers = ['ID', 'Name', 'Description', 'Price', 'Count', 'Purchase Date'];
+    const [items, setItems] = useState([]);
+
     let { item_id } = useParams(); // Get item_id from URL params
 
     useEffect(() => {
@@ -29,6 +35,7 @@ export default function GetItem(props) {
         fetch('/api/get-item?id=' + item_id)
             .then((response) => response.json())
             .then((data) => {
+                setItems([data]);
                 setItemDetails({
                     id: data.id || '',
                     name: data.name || '',
@@ -43,31 +50,13 @@ export default function GetItem(props) {
             });
     };
 
-
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="Inventory Item">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell>Price</TableCell>
-                        <TableCell>Count</TableCell>
-                        <TableCell>Purchase Date</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow component="th" scope='row'>
-                        <TableCell>{itemDetails.id}</TableCell>
-                        <TableCell>{itemDetails.name}</TableCell>
-                        <TableCell>{itemDetails.description}</TableCell>
-                        <TableCell>{itemDetails.price}</TableCell>
-                        <TableCell>{itemDetails.count}</TableCell>
-                        <TableCell>{itemDetails.purchase_date}</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            <Typography variant="h5">Item Details</Typography>
+            <Grid item xs={12} align="center">
+                <Button color="primary" variant="contained" component={Link} to="/" >Back</Button>
+            </Grid>
+            <ItemTable headers={headers} items={items} />
+        </>
     );
 }
