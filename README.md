@@ -2,6 +2,8 @@
 
 An app I'm creating to track my growing personal inventory comprised mostly of home automation gear (IoT), some gaming stuff, and other knick-knacks but it could extend to other things.
 
+Check out the project issue/feature tracker here: [Inventory Tracker GitHub Project](https://github.com/users/moh-i-ahmed/projects/2/views/1)
+
 ## Tech Stack
 
 - Backend
