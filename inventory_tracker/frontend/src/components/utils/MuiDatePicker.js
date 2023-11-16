@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 // Wrapper for the mui DatePicker component
 export const MuiDatePicker = () => {
     const [selectedDate, setSelectedDate] = useState(dayjs());
-    console.log(setSelectedDate)
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
