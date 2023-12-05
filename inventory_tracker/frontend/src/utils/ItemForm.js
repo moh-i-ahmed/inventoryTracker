@@ -1,39 +1,55 @@
 import React, { useEffect, useState, } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import { Button, Grid, Typography, TextField, FormControl, FormHelperText, Box, Paper } from '@mui/material';
 
-// projects
+// project components
+import { postItemDetails, putItemDetails } from '../services/itemService';
 import { MuiDatePicker } from './MuiDatePicker';
 
-export const ItemForm = ({ initialData = {}, isUpdating = false }) => {
+export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
         document.title = isUpdating ? 'Inventory Tracker | Update Item' : 'Inventory Tracker | Add Item';
     }, [isUpdating]);
 
-    // Set initial form values
-    const initialFormValues = {
-        name: '',
-        description: '',
-        price: '',
-        count: '',
-        purchase_date: dayjs().format('YYYY-MM-DD'),
+    const getInitialFormValues = () => {
+        if (!itemData) {
+            return {
+                id: '',
+                name: '',
+                description: '',
+                price: '',
+                count: '',
+                purchase_date: dayjs().format('YYYY-MM-DD'),
+            };
+        }
+        return {
+            id: itemData.id || '',
+            name: itemData.name || '',
+            description: itemData.description || '',
+            price: itemData.price || '',
+            count: itemData.count || '',
+            purchase_date: itemData.purchase_date ? dayjs(itemData.purchase_date) : dayjs(),
+        };
     };
 
-    // If initialData is not null, override the initial values
-    if (initialData && initialData.purchase_date) {
-        initialFormValues.purchase_date = dayjs(initialData.purchase_date).format('YYYY-MM-DD');
-    }
-    if (initialData) {
-        initialFormValues.name = initialData.name || '';
-        initialFormValues.description = initialData.description || '';
-        initialFormValues.price = initialData.price || '';
-        initialFormValues.count = initialData.count || '';
-    }
+    useEffect(() => {
+        // Update state when itemData changes
+        setState(getInitialFormValues());
+    }, [itemData]);
 
-    const [state, setState] = useState(initialFormValues);
+    const [state, setState] = useState(getInitialFormValues());
+    // const [state, setState] = useState({
+    //     id: itemData.id || '',
+    //     name: itemData.name || '',
+    //     description: itemData.description || '',
+    //     price: itemData.price || '',
+    //     count: itemData.count || '',
+    //     purchase_date: itemData.purchase_date ? dayjs(itemData.purchase_date).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
+    // });
+    console.log(itemData)
 
     const handleInputChange = (event) => {
         const { id, value } = event.target;
@@ -43,32 +59,27 @@ export const ItemForm = ({ initialData = {}, isUpdating = false }) => {
         });
     };
 
+    // Handler specifically for the date picker
+    const handleDateChange = (newValue) => {
+        setState({
+            ...state,
+            purchase_date: newValue
+        });
+    };
+
     const formStyle = {
         padding: '20px',
-        backgroundColor: '#f0f4f8', // Example color, you can choose your own
+        backgroundColor: '#f0f4f8', 
         margin: '20px',
         borderRadius: '15px'
     };
 
     const handleAddOrUpdateItemButtonOnClick = () => {
-        // build post request payload
-        const requestOptions = {
-            method: isUpdating ? 'PUT' : 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: state.name,
-                description: state.description,
-                price: state.price,
-                count: state.count,
-                purchase_date: dayjs(state.purchase_date).format('YYYY-MM-DD'),
-            }),
-        };
-
-        const endpoint = isUpdating ? `/api/update-item/${initialData.id}` : '/api/add-item';
-
-        fetch(endpoint, requestOptions)
-            .then((response) => response.json())
-            .then((data) => navigate('/get-item/' + data.id));
+        if (isUpdating) {
+            putItemDetails(state, navigate);
+        } else {
+            postItemDetails(state, navigate);
+        }
     };
 
     return (
@@ -86,6 +97,7 @@ export const ItemForm = ({ initialData = {}, isUpdating = false }) => {
                                     id="name"
                                     label="Name"
                                     required
+                                    style={{width: '100%'}}
                                     value={state.name}
                                     onChange={handleInputChange}
                                 />
@@ -94,6 +106,7 @@ export const ItemForm = ({ initialData = {}, isUpdating = false }) => {
                                 <TextField
                                     id="description"
                                     label="Description"
+                                    style={{width: '100%'}}
                                     value={state.description}
                                     onChange={handleInputChange}
                                 />
@@ -104,6 +117,7 @@ export const ItemForm = ({ initialData = {}, isUpdating = false }) => {
                                     label="Price"
                                     required
                                     type="number"
+                                    style={{width: '100%'}}
                                     value={state.price}
                                     inputProps={{ min: 0.0, step: 0.25 }}
                                     onChange={handleInputChange}
@@ -115,7 +129,7 @@ export const ItemForm = ({ initialData = {}, isUpdating = false }) => {
                                     label="Count"
                                     required
                                     type="number"
-                                    style = {{width: 100}}
+                                    style={{width: '100%'}}
                                     value={state.count}
                                     inputProps={{ min: 1 }}
                                     onChange={handleInputChange}
@@ -123,11 +137,18 @@ export const ItemForm = ({ initialData = {}, isUpdating = false }) => {
                             </Box>
                             <Box marginBottom={2}>
                                 <MuiDatePicker
+                                    value={state.purchase_date}
+                                    onChange={handleDateChange}
+                                />
+                            </Box>
+                            {/* <Box marginBottom={2}>
+                                <MuiDatePicker
                                     id="purchase_date"
+                                    style={{width: '100%'}}
                                     value={state.purchase_date}
                                     onChange={handleInputChange}
                                 />
-                            </Box>
+                            </Box> */}
                         </FormControl>
                         <Grid item xs={12} align="center">
                             <Button color="secondary" variant="contained" onClick={handleAddOrUpdateItemButtonOnClick}>

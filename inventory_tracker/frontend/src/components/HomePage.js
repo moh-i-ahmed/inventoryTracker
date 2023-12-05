@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
 
 // project components
-import { ItemTable } from './utils/ItemTable';
-import { NavBar } from './utils/NavBar';
-import { getAllItemsApiUrl } from './utils/endpoints';
-import { setTitle } from './utils/utils';
+import { getAllItemsApiUrl } from '../services/itemService';
+import { ItemTable } from '../utils/ItemTable';
+import { NavBar } from '../utils/NavBar';
+import { setTitle } from '../utils/utils';
 
 export default function HomePage() {
 
@@ -31,4 +31,3 @@ export default function HomePage() {
         </>
     );
 }
-

@@ -1,7 +1,6 @@
-import React, { Component, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, Redirect } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { animateScroll } from "react-scroll";
-import { Typography, Grid, Button } from '@mui/material';
 
 // my components
 import HomePage from "./HomePage";
