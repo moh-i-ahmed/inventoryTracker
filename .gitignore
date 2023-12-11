@@ -51,3 +51,4 @@ docs/_build/
 .vscode/settings.json
 *.pyc
 *.pyc
+*.h
