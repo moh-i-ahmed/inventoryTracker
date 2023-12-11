@@ -5,8 +5,9 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Table
 
 // project hooks
 import { useNavigateToPath } from './utils';
+import { deleteItem } from '../services/itemService';
 
-export const ItemTable = ({ items }) => {
+export const ItemTable = ({ items, onDeleteItem, onDeleteSuccess }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(15);
 
@@ -43,10 +44,20 @@ export const ItemTable = ({ items }) => {
         setPage(0); // Reset to the first page when changing rows per page
     };
 
+    const handleDelete = (id) => {
+        deleteItem(id, () => {
+            if (onDeleteSuccess) {
+                onDeleteSuccess(id);
+            } else if (onDeleteItem) {
+                onDeleteItem(id); // Fallback if onDeleteSuccess is not provided
+            }
+        });
+    };
+
     return (
         <>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 700 }} aria-label="Inventory Table">
+            <TableContainer sx={{ minWidth: 3/4 }} component={Paper}>
+                <Table sx={{ minWidth: 1000 }} aria-label="Inventory Table">
                     <TableHead>
                         <TableRow>
                             {headers.map((header, index) => (
@@ -64,7 +75,12 @@ export const ItemTable = ({ items }) => {
                                             {formatCellValue(key, item[key])}
                                         </TableCell>
                                     ))}
-                                    <Button color="secondary" variant="contained" onClick={() => navigateToPath(`/update-item/${item.id}`)}>Update</Button>
+                                    <TableCell align='center'>
+                                        <Button color="secondary" variant="contained" onClick={() => navigateToPath(`/update-item/${item.id}`)}>Update</Button>
+                                        &nbsp;
+                                        {/* <Button color="error" variant="contained" onClick={() => deleteItem(item.id, onDeleteItem)}>Delete</Button> */}
+                                        <Button color="error" variant="contained" onClick={() => handleDelete(item.id)}>Delete</Button>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                     </TableBody>

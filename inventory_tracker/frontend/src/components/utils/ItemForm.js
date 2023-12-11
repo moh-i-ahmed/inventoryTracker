@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { Button, Grid, Typography, TextField, FormControl, FormHelperText, Box, Paper, InputAdornment  } from '@mui/material';
 
 // project components
-import { postItemDetails, putItemDetails } from "../services/itemService";
+import { postItem, putItem } from "../services/itemService";
 
 export const ItemForm = ({ itemData={}, isUpdating=false }) => {
     const navigate = useNavigate();
@@ -52,9 +52,9 @@ export const ItemForm = ({ itemData={}, isUpdating=false }) => {
     // Handler for Add/Update button click
     const handleAddOrUpdateItemButtonOnClick = () => {
         if (isUpdating) {
-            putItemDetails(state, navigate);
+            putItem(state, navigate);
         } else {
-            postItemDetails(state, navigate);
+            postItem(state, navigate);
         }
     };
 

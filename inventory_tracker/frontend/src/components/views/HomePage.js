@@ -23,10 +23,14 @@ export default function HomePage() {
             });
     }, []);
 
+    const handleDeleteItem = (deletedId) => {
+        setItems(items.filter(item => item.id !== deletedId));
+    };
+
     return (
         <>
             <Typography variant="h5">Inventory Items</Typography>
-            <ItemTable items={items} />
+            <ItemTable items={items} onDeleteItem={handleDeleteItem} />
             <NavBar />
         </>
     );
