@@ -1,11 +1,12 @@
 import React, { useEffect, useState, } from 'react';
 import { useNavigate } from "react-router-dom";
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from "dayjs";
-import { Button, Grid, Typography, TextField, FormControl, FormHelperText, Box, Paper } from '@mui/material';
+import { Button, Grid, Typography, TextField, FormControl, FormHelperText, Box, Paper, InputAdornment  } from '@mui/material';
 
 // project components
-import { postItemDetails, putItemDetails } from '../services/itemService';
-import { MuiDatePicker } from './MuiDatePicker';
+import { postItemDetails, putItemDetails } from "../services/itemService";
 
 export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
     const navigate = useNavigate();
@@ -21,18 +22,20 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
                 name: '',
                 description: '',
                 price: '',
-                count: '',
+                count: '1',
                 purchase_date: dayjs().format('YYYY-MM-DD'),
             };
         }
-        return {
-            id: itemData.id || '',
-            name: itemData.name || '',
-            description: itemData.description || '',
-            price: itemData.price || '',
-            count: itemData.count || '',
-            purchase_date: itemData.purchase_date ? dayjs(itemData.purchase_date) : dayjs(),
-        };
+        else {
+            return {
+                id: itemData.id || '',
+                name: itemData.name || '',
+                description: itemData.description || '',
+                price: itemData.price || '',
+                count: itemData.count || '1',
+                purchase_date: itemData.purchase_date ? dayjs(itemData.purchase_date) : dayjs(),
+            };
+        }
     };
 
     useEffect(() => {
@@ -41,15 +44,6 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
     }, [itemData]);
 
     const [state, setState] = useState(getInitialFormValues());
-    // const [state, setState] = useState({
-    //     id: itemData.id || '',
-    //     name: itemData.name || '',
-    //     description: itemData.description || '',
-    //     price: itemData.price || '',
-    //     count: itemData.count || '',
-    //     purchase_date: itemData.purchase_date ? dayjs(itemData.purchase_date).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD'),
-    // });
-    console.log(itemData)
 
     const handleInputChange = (event) => {
         const { id, value } = event.target;
@@ -59,7 +53,7 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
         });
     };
 
-    // Handler specifically for the date picker
+    // Handler for date picker
     const handleDateChange = (newValue) => {
         setState({
             ...state,
@@ -67,19 +61,20 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
         });
     };
 
-    const formStyle = {
-        padding: '20px',
-        backgroundColor: '#f0f4f8', 
-        margin: '20px',
-        borderRadius: '15px'
-    };
-
+    // Handler for Add/Update button click
     const handleAddOrUpdateItemButtonOnClick = () => {
         if (isUpdating) {
             putItemDetails(state, navigate);
         } else {
             postItemDetails(state, navigate);
         }
+    };
+
+    const formStyle = {
+        padding: '20px',
+        backgroundColor: '#f0f4f8', 
+        margin: '20px',
+        borderRadius: '15px'
     };
 
     return (
@@ -119,7 +114,10 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
                                     type="number"
                                     style={{width: '100%'}}
                                     value={state.price}
-                                    inputProps={{ min: 0.0, step: 0.25 }}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">£</InputAdornment>,
+                                        inputProps: { min: 0.0, step: 0.25 }
+                                    }}
                                     onChange={handleInputChange}
                                 />
                             </Box>
@@ -136,17 +134,30 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
                                 />
                             </Box>
                             <Box marginBottom={2}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <DatePicker
+                                        id="purchase_date"
+                                        label="Purchase Date"
+                                        style={{width: '100%'}}
+                                        // value={state.purchase_date}
+                                        onChange={handleDateChange}
+                                        format="DD/MMM/YYYY"
+                                    />
+                                </LocalizationProvider>
+                            </Box>
+                            {/* <Box marginBottom={2}>
                                 <MuiDatePicker
-                                    value={state.purchase_date}
+                                    id="purchase_date"
+                                    purchaseDate={state.purchase_date}
                                     onChange={handleDateChange}
                                 />
-                            </Box>
+                            </Box> */}
                             {/* <Box marginBottom={2}>
                                 <MuiDatePicker
                                     id="purchase_date"
                                     style={{width: '100%'}}
                                     value={state.purchase_date}
-                                    onChange={handleInputChange}
+                                    onChange={handleDateChange}
                                 />
                             </Box> */}
                         </FormControl>
