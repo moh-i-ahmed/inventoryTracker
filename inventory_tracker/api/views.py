@@ -43,36 +43,14 @@ class AddOrUpdateItemView(APIView):
             # create a new item
             item = Item.objects.create(**item_data)
             item.save()
-            print(item)
             return Response(ItemSerializer(item).data, status=status.HTTP_201_CREATED)
-
-            # ensure item id exists
-            # item_id = serializer.validated_data.get('id')
-
-            # if item_id:
-            #     # update existing item
-            #     try:
-            #         item = Item.objects.get(id=item_id)
-            #         for key, value in item_data.items(): setattr(item, key, value)
-            #         item.save()
-            #         return Response(ItemSerializer(item).data, status=status.HTTP_200_OK)
-
-            #     # create a new item
-            #     except Item.DoesNotExist:
-            #         item = Item.objects.create(**item_data)
-            #         return Response(ItemSerializer(item).data, status=status.HTTP_201_CREATED)
-
-            # # create a new item
-            # else:
-                # item = Item.objects.create(**item_data)
-                # return Response(ItemSerializer(item).data, status=status.HTTP_201_CREATED)
 
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     def put(self, request, format=None):
-        """Post request to add a new item to the inventory."""
+        """Put request to add or update an inventory item."""
 
         # ensure session exists
         if not self.request.session.exists(self.request.session.session_key):
@@ -83,93 +61,45 @@ class AddOrUpdateItemView(APIView):
 
         # ensure serialized data is in valid format
         if serializer.is_valid():
-
-            # item_data = {
-            #     'id':          serializer.validated_data.get('id'),
-            #     'name':          serializer.validated_data.get('name'),
-            #     'description':   serializer.validated_data.get('description'),
-            #     'price':         serializer.validated_data.get('price'),
-            #     'count':         serializer.validated_data.get('count'),
-            #     'purchase_date': serializer.validated_data.get('purchase_date')
-            # }
-
-            # ensure item id exists
-            # item_id = serializer.validated_data.get('id')
-
             id = serializer.data.get('id')
             name = serializer.data.get('name')
             description = serializer.data.get('description')
             price = serializer.data.get('price')
             purchase_date = serializer.data.get('purchase_date')
             count = serializer.data.get('count')
-            queryset = Item.objects.filter(id=id)
+            
+            # ensure id is valid
+            if id is not None and isinstance(id, int):
+                queryset = Item.objects.filter(id=id)
 
-            # update existing item
-            if queryset.exists() :
-                print(f"Received data: {serializer.data}")
-                
-                item = queryset[0]
-                item.name = name
-                item.description = description
-                item.price = price
-                item.purchase_date = purchase_date
-                item.count = count
-                item.save(update_fields=['name', 'description', 'price', 'purchase_date', 'count'])
-                return Response(ItemSerializer(item).data, status=status.HTTP_200_OK)
-        #     if item_id:
-        #         # update existing item
-        #         try:
-        #             item = Item.objects.get(id=item_id)
-        #             for key, value in item_data.items(): setattr(item, key, value)
-        #             item.save()
-        #             return Response(ItemSerializer(item).data, status=status.HTTP_200_OK)
+                # update item
+                if queryset.exists() :
+                    print(f"Received data: {serializer.data}")
+                    
+                    item = queryset[0]
+                    item.name = name
+                    item.description = description
+                    item.price = price
+                    item.purchase_date = purchase_date
+                    item.count = count
+                    item.save(update_fields=['name', 'description', 'price', 'purchase_date', 'count'])
+                    return Response(ItemSerializer(item).data, status=status.HTTP_200_OK)
 
-        #         # create a new item
-        #         except Item.DoesNotExist:
-        #             item = Item.objects.create(**item_data)
-        #             return Response(ItemSerializer(item).data, status=status.HTTP_201_CREATED)
+            # invalid id, create new item
+            else:
+                item_data = {
+                    'name':          serializer.validated_data.get('name'),
+                    'description':   serializer.validated_data.get('description'),
+                    'price':         serializer.validated_data.get('price'),
+                    'count':         serializer.validated_data.get('count'),
+                    'purchase_date': serializer.validated_data.get('purchase_date')
+                }
+                item = Item.objects.create(**item_data)
+                item.save()
+                return Response(ItemSerializer(item).data, status=status.HTTP_201_CREATED)
 
-        #     # create a new item
-        #     else:
-        #         item = Item.objects.create(**item_data)
-        #         return Response(ItemSerializer(item).data, status=status.HTTP_201_CREATED)
+        return Response({f"Bad Request: Invalid data {serializer.data.items()}..."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # else:
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        #     id = serializer.data.get('id')
-        #     name = serializer.data.get('name')
-        #     description = serializer.data.get('description')
-        #     price = serializer.data.get('price')
-        #     purchase_date = serializer.data.get('purchase_date')
-        #     count = serializer.data.get('count')
-        #     queryset = Item.objects.filter(id=id)
-
-        #     # update existing item
-        #     if queryset.exists() :
-        #         item = queryset[0]
-        #         item.name = name
-        #         item.description = description
-        #         item.price = price
-        #         item.purchase_date = purchase_date
-        #         item.count = count
-        #         item.save(update_fields=['name', 'description', 'price', 'purchase_date', 'count'])
-        #         response = Response(ItemSerializer(item).data, status=status.HTTP_200_OK)
-
-        #     # save new item
-        #     else:
-        #         item = Item(name=name, description=description, price=price, purchase_date=purchase_date, count=count)
-        #         item.save()
-        #         response = Response(ItemSerializer(item).data, status=status.HTTP_201_CREATED)
-        
-        # # post data invalid
-        # else :
-        #     logging.debug(msg=serializer.data.items())
-        #     print(serializer.data.items())
-        #     print(serializer.errors)
-        #     response = Response({f"Bad Request: Invalid data {serializer.data.items()}..."}, status=status.HTTP_400_BAD_REQUEST)
-
-        return
 
 class GetItemView(APIView):
 
