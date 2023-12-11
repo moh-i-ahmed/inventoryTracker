@@ -12,18 +12,16 @@ export default function GetItem(props) {
     setTitle( { title:"Inventory Tracker | Get Item" } );
 
     const [itemData, setItemData] = useState([]);
-
     let { item_id } = useParams(); // get item_id from url params
 
+    // Fetch item details on page load
     useEffect(() => {
-        // fetch item details given item id
         const fetchData = async () => {
             if (item_id) {
                 const data = await fetchItemDetails(item_id);
                 setItemData([data]);
             }
         }
-
         fetchData().catch(error => console.error("Error in fetchData:", error));
     }, [item_id]);
 

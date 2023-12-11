@@ -8,7 +8,7 @@ import { Button, Grid, Typography, TextField, FormControl, FormHelperText, Box, 
 // project components
 import { postItemDetails, putItemDetails } from "../services/itemService";
 
-export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
+export const ItemForm = ({ itemData={}, isUpdating=false }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -16,30 +16,18 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
     }, [isUpdating]);
 
     const getInitialFormValues = () => {
-        if (!itemData) {
-            return {
-                id: '',
-                name: '',
-                description: '',
-                price: '',
-                count: '1',
-                purchase_date: dayjs().format('YYYY-MM-DD'),
-            };
-        }
-        else {
-            return {
-                id: itemData.id || '',
-                name: itemData.name || '',
-                description: itemData.description || '',
-                price: itemData.price || '',
-                count: itemData.count || '1',
-                purchase_date: itemData.purchase_date ? dayjs(itemData.purchase_date) : dayjs(),
-            };
-        }
+        return {
+            id: itemData ? itemData.id : '',
+            name: itemData ? itemData.name : '',
+            description: itemData ? itemData.description : '',
+            price: itemData ? itemData.price : '',
+            count: itemData ? itemData.count : '1',
+            purchase_date: itemData ? dayjs(itemData.purchase_date) : dayjs(),
+        };
     };
 
+    // Update state when itemData changes
     useEffect(() => {
-        // Update state when itemData changes
         setState(getInitialFormValues());
     }, [itemData]);
 
@@ -139,27 +127,12 @@ export const ItemForm = ({ itemData = {}, isUpdating = false }) => {
                                         id="purchase_date"
                                         label="Purchase Date"
                                         style={{width: '100%'}}
-                                        // value={state.purchase_date}
+                                        value={state.purchase_date}
                                         onChange={handleDateChange}
                                         format="DD/MMM/YYYY"
                                     />
                                 </LocalizationProvider>
                             </Box>
-                            {/* <Box marginBottom={2}>
-                                <MuiDatePicker
-                                    id="purchase_date"
-                                    purchaseDate={state.purchase_date}
-                                    onChange={handleDateChange}
-                                />
-                            </Box> */}
-                            {/* <Box marginBottom={2}>
-                                <MuiDatePicker
-                                    id="purchase_date"
-                                    style={{width: '100%'}}
-                                    value={state.purchase_date}
-                                    onChange={handleDateChange}
-                                />
-                            </Box> */}
                         </FormControl>
                         <Grid item xs={12} align="center">
                             <Button color="secondary" variant="contained" onClick={handleAddOrUpdateItemButtonOnClick}>

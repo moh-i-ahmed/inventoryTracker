@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TablePagination,
-    Paper
-} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, Button } from '@mui/material';
+
+// project hooks
+import { useNavigateToPath } from './utils';
 
 export const ItemTable = ({ items }) => {
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(15);
 
     const location = useLocation();
+    const navigateToPath = useNavigateToPath();
     const shouldShowPagination = !location.pathname.includes('get-item');
 
     // Format header string into 'Title Case' and replace underscores with spaces
@@ -32,6 +27,9 @@ export const ItemTable = ({ items }) => {
 
     // Format date into desired format
     const formatCellValue = (key, value) => {
+        if (key === 'price') {
+            return `£${value}`;
+        }
         if (key === 'purchase_date' && value) {
             return dayjs(value).format('DD/MMM/YYYY');
         }
@@ -48,7 +46,7 @@ export const ItemTable = ({ items }) => {
     return (
         <>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="Inventory Table">
+                <Table sx={{ minWidth: 700 }} aria-label="Inventory Table">
                     <TableHead>
                         <TableRow>
                             {headers.map((header, index) => (
@@ -66,6 +64,7 @@ export const ItemTable = ({ items }) => {
                                             {formatCellValue(key, item[key])}
                                         </TableCell>
                                     ))}
+                                    <Button color="secondary" variant="contained" onClick={() => navigateToPath(`/update-item/${item.id}`)}>Update</Button>
                                 </TableRow>
                             ))}
                     </TableBody>

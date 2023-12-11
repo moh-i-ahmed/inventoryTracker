@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { animateScroll } from "react-scroll";
 
 // my components
-import HomePage from "./HomePage";
-import AddOrUpdateItem from "./AddOrUpdateItem";
-import GetItem from "./GetItem";
+import HomePage from "./views/HomePage";
+import AddOrUpdateItem from "./views/AddOrUpdateItem";
+import GetItem from "./views/GetItem";
 
 // main component
 export default function App(props) {

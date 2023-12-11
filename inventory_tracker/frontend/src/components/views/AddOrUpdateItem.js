@@ -33,7 +33,9 @@ export default function AddOrUpdateItem() {
     return (
         <>
             <ItemForm itemData={itemData} isUpdating={isUpdating} />
-            <NavBar />
+            <div>
+                <NavBar />
+            </div>
         </>
     );
 };

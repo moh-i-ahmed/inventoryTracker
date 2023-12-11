@@ -49,7 +49,7 @@ export const putItemDetails = async (item, navigate) => {
     try {
         const response = await fetch(`/api/update-item/?id=${item.id}`, requestOptions('PUT', item));
         const data = await response.json();
-        navigate('/get-item/' + data.id);
+        navigate(`/get-item/${data.id}`);
     } catch (error) {
         console.error('Error in updating item:', error);
     }
