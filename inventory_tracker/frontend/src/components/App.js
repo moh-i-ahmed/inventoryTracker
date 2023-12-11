@@ -1,11 +1,11 @@
-import React, { Component, useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, Redirect } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { animateScroll } from "react-scroll";
 
 // my components
-import HomePage from "./HomePage";
-import AddItem from "./AddItem";
-import GetItem from "./GetItem";
+import HomePage from "./views/HomePage";
+import AddOrUpdateItem from "./views/AddOrUpdateItem";
+import GetItem from "./views/GetItem";
 
 // main component
 export default function App(props) {
@@ -22,9 +22,10 @@ export default function App(props) {
         <div className="center">
             <Router>
                 <Routes>
-                    <Route path="/"                  element={<HomePage/>} />
-                    <Route path="/add-item"          element={<AddItem/>} />
-                    <Route path="/get-item/:item_id" element={<GetItem/>} />
+                    <Route path="/"                     element={<HomePage/>} />
+                    <Route path="/add-item"             element={<AddOrUpdateItem/>} />
+                    <Route path="/update-item/:item_id" element={<AddOrUpdateItem/>} />
+                    <Route path="/get-item/:item_id"    element={<GetItem/>} />
                 </Routes>
             </Router>
         </div>
