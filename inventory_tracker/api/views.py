@@ -119,6 +119,25 @@ class GetItemView(APIView):
                 data = ItemSerializer(item[0]).data
                 return Response(data, status=status.HTTP_200_OK)
             
-            return Response({'Item Not Found' : 'Invalid Item ID'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'msg' : 'Invalid Item ID'}, status=status.HTTP_404_NOT_FOUND)
         
         return Response({"Bad Request": "'ID' parameter not found in request"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DeleteItemView(APIView):
+
+    # search for id keyword arg
+    lookup_url_kwarg = 'id'
+
+    def delete(self, request, format=None):
+        """Delete request to remove an item from the inventory"""
+        id = request.GET.get(self.lookup_url_kwarg)
+
+        try:
+            item = Item.objects.filter(id=id)
+        except:
+            return Response({"msg" : "Invalid Item ID"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            item.delete()
+            return Response({"msg" : f"Item ID {id} deleted"}, status=status.HTTP_204_NO_CONTENT)
+
