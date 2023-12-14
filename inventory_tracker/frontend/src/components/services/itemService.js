@@ -64,13 +64,6 @@ export const deleteItem = async (id, onDeleteSuccess=false) => {
 
         if (response.status === 204) {
             onDeleteSuccess(id);
-            // if (onDeleteSuccess === false){
-            //     // let navigate = useNavigate();
-            //     // navigate('/');
-            //     console.log("YEs")
-            // } else{
-            //     onDeleteSuccess(id);
-            // }
         } else {
             console.log("Error deleting item")
         }
